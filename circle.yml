@@ -1,0 +1,28 @@
+---
+machine:
+  php:
+    version: 7.0.4
+  ruby:
+    version: 2.0.0
+
+dependencies:
+  pre:
+    - make deps
+    - make deps-circle
+
+test:
+  override:
+    - make all
+
+deployment:
+  dev:
+    branch:
+      - stage
+      - yolo
+      - dev
+    commands:
+      - bash scripts/push_packagecloud.sh internal-staging
+  prod:
+    branch: master
+    commands:
+      - bash scripts/push_packagecloud.sh internal
