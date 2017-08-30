@@ -68,7 +68,7 @@ drush=drush
 if [ -z "$(which drush)" ] ; then
 	drush_dir="$bin/../builds/tools"
 	mkdir -p "$drush_dir"
-	composer -d "$drush_dir" -n require drush/drush:^8
+	composer --working-dir="$drush_dir" -n require drush/drush:^8
 	drush="$drush_dir/vendor/bin/drush"
 fi
 
