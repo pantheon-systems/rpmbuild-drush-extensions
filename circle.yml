@@ -1,9 +1,9 @@
 ---
 machine:
   php:
-    version: 7.0.4
+    version: 7.0.11
   ruby:
-    version: 2.0.0
+    version: 2.2.3
 
 dependencies:
   pre:
@@ -15,12 +15,11 @@ test:
     - make all
 
 deployment:
-  dev:
+  deploy:
     branch:
-      - stage
-      - yolo
-      - dev
+      - /^(?!master$).*$/  # not the master branch
     commands:
+      - rsync -ravz pkgs/drush-extensions/ $CIRCLE_ARTIFACTS
       - bash scripts/push_packagecloud.sh internal-staging
   prod:
     branch: master
