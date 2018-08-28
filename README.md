@@ -36,11 +36,11 @@ Any time a commit is merged on a tracked branch, then a drush extensions RPM is 
 Branch       | Target
 ------------ | ---------------
 master       | pantheon/internal/fedora/#
-stage        | pantheon/internal-staging/fedora/#
+PR           | pantheon/internal-staging/fedora/#
 
 In the table above, # is the fedora build number (22). Note that drush is only installed on app servers, and there are no app servers on anything prior to f22; therefore, at the moment, we are only publishing for f22. Note also that these are noarch RPMs.
 
-To release new versions of drush, simply update the VERSIONS.txt file and commit. Run `make all`. Push to one of the branches above to have an official RPM built and pushed to Package Cloud via Circle CI.
+To release new versions of drush extensions, simply update the VERSIONS.txt file and commit. Run `make all`. Push to one of the branches above to have an official RPM built and pushed to Package Cloud via Circle CI.
 
 ## Provisioning drush on Pantheon
 
