@@ -79,6 +79,9 @@ $drush dl -y registry_rebuild-$drupal_8_registry_rebuild_version --destination="
 $drush dl -y site_audit-$drupal_7_site_audit_version --destination="$download_dir/drupal-7-drush-commandfiles/extensions"
 $drush dl -y registry_rebuild-$drupal_7_registry_rebuild_version --destination="$download_dir/drupal-7-drush-commandfiles/extensions"
 
+# Todo: Update to stable release of site-audit-tool
+mkdir -p "$download_dir/drush-9-commandfiles/Commands"
+git clone https://github.com/greg-1-anderson/site-audit-tool.git "$download_dir/drush-9-commandfiles/Commands/site-audit-tool"
 
 mkdir -p "$target_dir"
 
