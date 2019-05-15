@@ -66,10 +66,10 @@ mkdir -p $download_dir
 # Determine whether we need to install Drush or not
 drush=drush
 if [ -z "$(which drush)" ] ; then
-	drush_dir="$bin/../builds/tools"
-	mkdir -p "$drush_dir"
-	composer --working-dir="$drush_dir" -n require drush/drush:^8
-	drush="$drush_dir/vendor/bin/drush"
+	# Get Drush just to use 'drush dl'
+	curl -L -f https://github.com/drush-ops/drush/releases/download/8.2.3/drush.phar --output "$bin/drush"
+	chmod +x "$bin/drush"
+	drush="$bin/drush"
 fi
 
 
