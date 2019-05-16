@@ -1,7 +1,7 @@
 
 all: clean rpm
 
-test: deps
+test:
 	tests/confirm-rpm.sh
 
 deps:

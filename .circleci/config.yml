@@ -20,7 +20,7 @@ jobs:
       - run: make deps-f22
       - run:
           name: Build RPM
-          command: make all test
+          command: make all
           no_output_timeout: 4h
       - persist_to_workspace:
           root: /rpmbuild
