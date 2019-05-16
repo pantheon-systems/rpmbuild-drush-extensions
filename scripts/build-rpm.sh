@@ -9,21 +9,6 @@ CIRCLE_BUILD_NUM=${CIRCLE_BUILD_NUM:-0}
 # epoch to use for -revision
 epoch=$(date +%s)
 
-case $CIRCLE_BRANCH in
-"master")
-	CHANNEL="release"
-	;;
-"stage")
-	CHANNEL="stage"
-	;;
-"yolo")
-	CHANNEL="yolo"
-	;;
-*)
-	CHANNEL="dev"
-	;;
-esac
-
 shortname="drush-extensions"
 arch='noarch'
 vendor='Pantheon'
@@ -47,16 +32,6 @@ if [ -z "$(git diff-index --quiet HEAD --)" ]
 then
 	GITSHA=$(git log -1 --format="%h")
 	iteration=${iteration}.git${GITSHA}
-else
-	# Allow non-clean builds in dev mode; for anything else, fail if there
-	# are uncommitted changes.
-	if [ "$CHANNEL" != "dev" ]
-	then
-		echo >&2
-		echo "Error: uncommitted changes present. Please commit to continue." >&2
-		echo "Git commithash is included in rpm, so working tree must be clean to build." >&2
-		exit 1
-	fi
 fi
 
 # Make sure we start clean
@@ -79,9 +54,19 @@ $drush dl -y registry_rebuild-$drupal_8_registry_rebuild_version --destination="
 $drush dl -y site_audit-$drupal_7_site_audit_version --destination="$download_dir/drupal-7-drush-commandfiles/extensions"
 $drush dl -y registry_rebuild-$drupal_7_registry_rebuild_version --destination="$download_dir/drupal-7-drush-commandfiles/extensions"
 
+# We need to run 'composer install' on site_audit (d7 and d8).
+# Site Audit does not have any dependencies that it autoloads, but it does
+# exec binary programs from vendor/bin.
+composer --working-dir="$download_dir/drupal-8-drush-commandfiles/extensions/site_audit" install --no-dev
+composer --working-dir="$download_dir/drupal-7-drush-commandfiles/extensions/site_audit" install
+
 # Todo: Update to stable release of site-audit-tool
 mkdir -p "$download_dir/drush-9-commandfiles/Commands"
 git clone https://github.com/greg-1-anderson/site-audit-tool.git "$download_dir/drush-9-commandfiles/Commands/site-audit-tool"
+
+# Remove the .git repositories and test directories; we don't want those in our rpm
+rm -rf $(find $download_dir -name .git)
+rm -rf $(find $download_dir -iname "tests")
 
 mkdir -p "$target_dir"
 

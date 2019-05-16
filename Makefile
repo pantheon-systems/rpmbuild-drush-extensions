@@ -8,7 +8,7 @@ deps:
 	gem install fpm
 
 deps-macos:
-	brew install rpm
+	sudo gem install --no-ri --no-rdoc fpm
 
 deps-circle:
 	sudo apt-get -y install rpm
