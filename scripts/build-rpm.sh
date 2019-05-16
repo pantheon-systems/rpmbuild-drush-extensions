@@ -57,8 +57,8 @@ $drush dl -y registry_rebuild-$drupal_7_registry_rebuild_version --destination="
 # We need to run 'composer install' on site_audit (d7 and d8).
 # Site Audit does not have any dependencies that it autoloads, but it does
 # exec binary programs from vendor/bin.
-composer --working-dir="$download_dir/drupal-8-drush-commandfiles/extensions/site_audit" install --no-dev
-composer --working-dir="$download_dir/drupal-7-drush-commandfiles/extensions/site_audit" install
+composer --working-dir="$download_dir/drupal-8-drush-commandfiles/extensions/site_audit" install --no-dev --ignore-platform-reqs
+composer --working-dir="$download_dir/drupal-7-drush-commandfiles/extensions/site_audit" install --ignore-platform-reqs
 
 # Todo: Update to stable release of site-audit-tool
 mkdir -p "$download_dir/drush-9-commandfiles/Commands"
