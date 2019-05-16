@@ -14,6 +14,7 @@ deps-macos:
 deps-f22:
 	yum install -y php
 	yum install -y composer
+	echo 'memory_limit=-1' >> $(php -r "echo php_ini_loaded_file();")
 
 deps-circle:
 	sudo apt-get -y install rpm
