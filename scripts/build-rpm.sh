@@ -40,7 +40,7 @@ mkdir -p $download_dir
 
 # Determine whether we need to install Drush or not
 drush=drush
-if [ -z "$(which drush)" ] ; then
+if [ -z "$(command -v drush)" ] ; then
 	# Get Drush just to use 'drush dl'
 	curl -L -f https://github.com/drush-ops/drush/releases/download/8.2.3/drush.phar --output "$bin/drush"
 	chmod +x "$bin/drush"
@@ -62,7 +62,7 @@ composer --working-dir="$download_dir/drupal-7-drush-commandfiles/extensions/sit
 
 # Todo: Update to stable release of site-audit-tool
 mkdir -p "$download_dir/drush-9-commandfiles/Commands"
-composer create-project pantheon-systems/site-audit-tool:^1.1 --working-dir="$download_dir/drush-9-extensions/Commands/site-audit-tool" install --ignore-platform-reqs
+composer create-project pantheon-systems/site-audit-tool:^1.1 "$download_dir/drush-9-extensions/Commands/site-audit-tool" --ignore-platform-reqs
 
 # Remove the .git repositories and test directories; we don't want those in our rpm
 rm -rf $(find $download_dir -name .git)
