@@ -62,7 +62,7 @@ composer --working-dir="$download_dir/drupal-7-drush-commandfiles/extensions/sit
 
 # Todo: Update to stable release of site-audit-tool
 mkdir -p "$download_dir/drush-9-commandfiles/Commands"
-composer create-project pantheon-systems/site-audit-tool:^1.1 "$download_dir/drush-9-extensions/Commands/site-audit-tool" --ignore-platform-reqs
+composer create-project pantheon-systems/site-audit-tool:^1.1.1 "$download_dir/drush-9-extensions/Commands/site-audit-tool" --no-dev --ignore-platform-reqs
 
 # Remove the .git repositories and test directories; we don't want those in our rpm
 rm -rf $(find $download_dir -name .git)
