@@ -9,21 +9,6 @@ CIRCLE_BUILD_NUM=${CIRCLE_BUILD_NUM:-0}
 # epoch to use for -revision
 epoch=$(date +%s)
 
-case $CIRCLE_BRANCH in
-"master")
-	CHANNEL="release"
-	;;
-"stage")
-	CHANNEL="stage"
-	;;
-"yolo")
-	CHANNEL="yolo"
-	;;
-*)
-	CHANNEL="dev"
-	;;
-esac
-
 shortname="drush-extensions"
 arch='noarch'
 vendor='Pantheon'
@@ -47,16 +32,6 @@ if [ -z "$(git diff-index --quiet HEAD --)" ]
 then
 	GITSHA=$(git log -1 --format="%h")
 	iteration=${iteration}.git${GITSHA}
-else
-	# Allow non-clean builds in dev mode; for anything else, fail if there
-	# are uncommitted changes.
-	if [ "$CHANNEL" != "dev" ]
-	then
-		echo >&2
-		echo "Error: uncommitted changes present. Please commit to continue." >&2
-		echo "Git commithash is included in rpm, so working tree must be clean to build." >&2
-		exit 1
-	fi
 fi
 
 # Make sure we start clean
@@ -65,11 +40,11 @@ mkdir -p $download_dir
 
 # Determine whether we need to install Drush or not
 drush=drush
-if [ -z "$(which drush)" ] ; then
-	drush_dir="$bin/../builds/tools"
-	mkdir -p "$drush_dir"
-	composer --working-dir="$drush_dir" -n require drush/drush:^8
-	drush="$drush_dir/vendor/bin/drush"
+if [ -z "$(command -v drush)" ] ; then
+	# Get Drush just to use 'drush dl'
+	curl -L -f https://github.com/drush-ops/drush/releases/download/8.2.3/drush.phar --output "$bin/drush"
+	chmod +x "$bin/drush"
+	drush="$bin/drush"
 fi
 
 
@@ -79,6 +54,19 @@ $drush dl -y registry_rebuild-$drupal_8_registry_rebuild_version --destination="
 $drush dl -y site_audit-$drupal_7_site_audit_version --destination="$download_dir/drupal-7-drush-commandfiles/extensions"
 $drush dl -y registry_rebuild-$drupal_7_registry_rebuild_version --destination="$download_dir/drupal-7-drush-commandfiles/extensions"
 
+# We need to run 'composer install' on site_audit (d7 and d8).
+# Site Audit does not have any dependencies that it autoloads, but it does
+# exec binary programs from vendor/bin.
+composer --working-dir="$download_dir/drupal-8-drush-commandfiles/extensions/site_audit" install --no-dev --ignore-platform-reqs
+composer --working-dir="$download_dir/drupal-7-drush-commandfiles/extensions/site_audit" install --ignore-platform-reqs
+
+# Todo: Update to stable release of site-audit-tool
+mkdir -p "$download_dir/drush-9-commandfiles/Commands"
+composer create-project pantheon-systems/site-audit-tool:^1.1.1 "$download_dir/drush-9-extensions/Commands/site-audit-tool" --no-dev --ignore-platform-reqs
+
+# Remove the .git repositories and test directories; we don't want those in our rpm
+rm -rf $(find $download_dir -name .git)
+rm -rf $(find $download_dir -iname "tests")
 
 mkdir -p "$target_dir"
 
