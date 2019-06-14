@@ -8,7 +8,8 @@ deps:
 	gem install fpm
 
 deps-macos:
-	sudo gem install --no-ri --no-rdoc fpm
+	gem install --no-ri --no-rdoc fpm
+	brew install rpm
 
 # Add php 5.6 and Composer into our container
 deps-f22:

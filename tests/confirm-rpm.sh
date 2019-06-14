@@ -61,11 +61,19 @@ then
 fi
 
 contents=$(rpm -qpl "$pkgDir/$rpmName")
-if [ -z "$(echo "$contents" | grep '/etc/drush/drupal-8-drush-commandfiles/extensions/site_audit')" ]
+if [ -z "$(echo "$contents" | grep '/etc/drush/drupal-7-drush-commandfiles/extensions/site_audit')" ]
 then
-  echo "RPM contents not correct"
+  echo "RPM does not contain drupal 7 version of site audit"
   exit 1
 fi
+
+if [ -z "$(echo "$contents" | grep '/etc/drush/drush-9-extensions/Commands/site-audit-tool')" ]
+then
+  echo "RPM does not contain drush 9 version of site audit"
+  exit 1
+fi
+
+
 
 echo 'Basic rpm validation checks all passed.'
 exit 0

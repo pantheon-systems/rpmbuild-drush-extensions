@@ -49,20 +49,21 @@ fi
 
 
 # Download the extensions we need; drop them in the directories they belong in
-$drush dl -y site_audit-$drupal_8_site_audit_version --destination="$download_dir/drupal-8-drush-commandfiles/extensions"
-$drush dl -y registry_rebuild-$drupal_8_registry_rebuild_version --destination="$download_dir/drupal-8-drush-commandfiles/extensions"
 $drush dl -y site_audit-$drupal_7_site_audit_version --destination="$download_dir/drupal-7-drush-commandfiles/extensions"
 $drush dl -y registry_rebuild-$drupal_7_registry_rebuild_version --destination="$download_dir/drupal-7-drush-commandfiles/extensions"
 
 # We need to run 'composer install' on site_audit (d7 and d8).
 # Site Audit does not have any dependencies that it autoloads, but it does
 # exec binary programs from vendor/bin.
-composer --working-dir="$download_dir/drupal-8-drush-commandfiles/extensions/site_audit" install --no-dev --ignore-platform-reqs
+# composer --working-dir="$download_dir/drupal-8-drush-commandfiles/extensions/site_audit" install --no-dev --ignore-platform-reqs
 composer --working-dir="$download_dir/drupal-7-drush-commandfiles/extensions/site_audit" install --ignore-platform-reqs
 
 # Todo: Update to stable release of site-audit-tool
 mkdir -p "$download_dir/drush-9-commandfiles/Commands"
 composer create-project pantheon-systems/site-audit-tool:^1.1.1 "$download_dir/drush-9-extensions/Commands/site-audit-tool" --no-dev --ignore-platform-reqs
+rm -f "$download_dir/drush-9-extensions/Commands/site-audit-tool/testing"
+mkdir -p "$download_dir/drupal-8-drush-commandfiles/extensions"
+cp -r "$download_dir/drush-9-extensions/Commands" "$download_dir/drupal-8-drush-commandfiles/extensions"
 
 # Remove the .git repositories and test directories; we don't want those in our rpm
 rm -rf $(find $download_dir -name .git)
