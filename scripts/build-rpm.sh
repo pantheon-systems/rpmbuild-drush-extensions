@@ -14,7 +14,9 @@ arch='noarch'
 vendor='Pantheon'
 description='drush extensions: Pantheon rpm containing additional Drush commands'
 
-drupal_8_site_audit_version=8.x-2.2
+# A quite-arbitrary version number that no longer has any relationship to anything
+drush_extensions_version=8.3.0
+
 drupal_8_registry_rebuild_version=7.x-2.5
 drupal_7_site_audit_version=7.x-1.16
 drupal_7_registry_rebuild_version=7.x-2.5
@@ -63,8 +65,8 @@ composer --working-dir="$download_dir/drupal-7-drush-commandfiles/extensions/sit
 mkdir -p "$download_dir/drush-9-commandfiles/Commands"
 composer create-project pantheon-systems/site-audit-tool:$site_audit_tool_version "$download_dir/drush-9-extensions/Commands/site-audit-tool" --no-dev --ignore-platform-reqs
 rm -f "$download_dir/drush-9-extensions/Commands/site-audit-tool/testing"
-mkdir -p "$download_dir/drupal-8-drush-commandfiles/extensions"
-cp -r "$download_dir/drush-9-extensions/Commands" "$download_dir/drupal-8-drush-commandfiles/extensions"
+mkdir -p "$download_dir/drupal-8-drush-commandfiles"
+cp -r "$download_dir/drush-9-extensions/Commands" "$download_dir/drupal-8-drush-commandfiles"
 
 # Remove the .git repositories and test directories; we don't want those in our rpm
 rm -rf $(find $download_dir -name .git)
@@ -72,14 +74,10 @@ rm -rf $(find $download_dir -iname "tests")
 
 mkdir -p "$target_dir"
 
-# Use the Drupal 8 site audit version as our version number.
-# Convert from '8.x-2.0' to '8.2.0'.
-version=$(echo $drupal_8_site_audit_version | sed -e 's/x-//')
-
 fpm -s dir -t rpm	 \
 	--package "$target_dir/${name}-${version}-${iteration}.${arch}.rpm" \
 	--name "${name}" \
-	--version "${version}" \
+	--version "${drush_extensions_version}" \
 	--iteration "${iteration}" \
 	--epoch "${epoch}" \
 	--architecture "${arch}" \
