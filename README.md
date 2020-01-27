@@ -22,10 +22,15 @@ This rpm contains:
   - Registry rebuild
     - drush dl registry_rebuild-7.x-2.3
 
-These extensions are placed in an installation directory that varies by the Drupal version:
+For Drush 8, these extensions are placed in an installation directory that varies by the Drupal version:
 
 - /etc/drush/drupal-8-drush-commandfiles/extensions
 - /etc/drush/drupal-7-drush-commandfiles/extensions
+
+The site audit tool is also placed in locations specific to Drush 9 / Drush 10:
+
+- /etc/drush/drush-9-extensions/Commands
+- /etc/drush/drush-10-extensions/Commands
 
 Note that for historic reasons, the extensions for Drush 5 are included in the RPM for Drush 5, and are inserted directly into Drush 5's `commands` directory (/opt/drush5/commands). No further updates are anticipated to Drush 5, or the Drush 5 extensions.
 
