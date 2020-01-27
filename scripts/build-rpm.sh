@@ -65,6 +65,8 @@ composer --working-dir="$download_dir/drupal-7-drush-commandfiles/extensions/sit
 mkdir -p "$download_dir/drush-9-commandfiles/Commands"
 composer create-project pantheon-systems/site-audit-tool:$site_audit_tool_version "$download_dir/drush-9-extensions/Commands/site-audit-tool" --no-dev --ignore-platform-reqs
 rm -f "$download_dir/drush-9-extensions/Commands/site-audit-tool/testing"
+mkdir -p "$download_dir/drush-10-extensions"
+cp -r "$download_dir/drush-9-extensions/Commands" "$download_dir/drush-10-extensions"
 mkdir -p "$download_dir/drupal-8-drush-commandfiles"
 cp -r "$download_dir/drush-9-extensions/Commands" "$download_dir/drupal-8-drush-commandfiles"
 
