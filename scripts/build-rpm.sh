@@ -20,7 +20,7 @@ drush_extensions_version=8.3.0
 drupal_8_registry_rebuild_version=7.x-2.5
 drupal_7_site_audit_version=7.x-1.16
 drupal_7_registry_rebuild_version=7.x-2.5
-site_audit_tool_version=1.1.9
+site_audit_tool_version=1.2.0
 
 name="$shortname"
 
@@ -61,7 +61,6 @@ $drush dl -y registry_rebuild-$drupal_7_registry_rebuild_version --destination="
 # composer --working-dir="$download_dir/drupal-8-drush-commandfiles/extensions/site_audit" install --no-dev --ignore-platform-reqs
 composer --working-dir="$download_dir/drupal-7-drush-commandfiles/extensions/site_audit" install --ignore-platform-reqs
 
-# Todo: Update to stable release of site-audit-tool
 mkdir -p "$download_dir/drush-9-commandfiles/Commands"
 composer create-project pantheon-systems/site-audit-tool:$site_audit_tool_version "$download_dir/drush-9-extensions/Commands/site-audit-tool" --no-dev --ignore-platform-reqs
 rm -f "$download_dir/drush-9-extensions/Commands/site-audit-tool/testing"
