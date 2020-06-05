@@ -20,7 +20,7 @@ drush_extensions_version=8.3.0
 drupal_8_registry_rebuild_version=7.x-2.5
 drupal_7_site_audit_version=7.x-1.16
 drupal_7_registry_rebuild_version=7.x-2.5
-site_audit_tool_version=1.2.0
+site_audit_tool_version=1.2.1
 
 name="$shortname"
 
